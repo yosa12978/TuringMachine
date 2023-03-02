@@ -1,0 +1,36 @@
+{
+    "tape": "0000000000000000000000000",
+    "headPosition": -1,
+    "haltState": "HALT",
+    "initialState": "q1",
+    "rules": [
+        {
+            "currentState": "q1",
+            "tapeSymbol": "0",
+            "nextState": "q2",
+            "writeSymbol": "1",
+            "move": "R"
+        },
+        {
+            "currentState": "q1",
+            "tapeSymbol": "1",
+            "nextState": "q2",
+            "writeSymbol": "1",
+            "move": "L"
+        },
+        {
+            "currentState": "q2",
+            "tapeSymbol": "0",
+            "nextState": "q1",
+            "writeSymbol": "1",
+            "move": "L"
+        },
+        {
+            "currentState": "q2",
+            "tapeSymbol": "1",
+            "nextState": "HALT",
+            "writeSymbol": "1",
+            "move": "R"
+        }
+    ]
+}
