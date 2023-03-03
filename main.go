@@ -18,20 +18,10 @@ type Rule struct {
 
 type Machine struct {
 	Tape         []string `json:"tape"`
-	CurrentState string   `json:"initialState"`
+	CurrentState string   `json:"currentState"`
 	Rules        []Rule   `json:"rules"`
 	Head         int      `json:"head"`
 	HaltState    string   `json:"haltState"`
-}
-
-func NewMachine(tape []string, currentState string, rules []Rule, head int, haltState string) *Machine {
-	return &Machine{
-		Tape:         tape,
-		CurrentState: currentState,
-		Rules:        rules,
-		Head:         head,
-		HaltState:    haltState,
-	}
 }
 
 func (m *Machine) PrintTape() {
@@ -75,6 +65,45 @@ func (m *Machine) Run() error {
 	return nil
 }
 
+type MachineBuilder struct {
+	machine *Machine
+}
+
+func NewMachineBuilder() *MachineBuilder {
+	return &MachineBuilder{
+		machine: &Machine{},
+	}
+}
+
+func (mb *MachineBuilder) AddTape(tape []string) *MachineBuilder {
+	mb.machine.Tape = tape
+	return mb
+}
+
+func (mb *MachineBuilder) AddCurrentState(currentState string) *MachineBuilder {
+	mb.machine.CurrentState = currentState
+	return mb
+}
+
+func (mb *MachineBuilder) AddHeadPosition(position int) *MachineBuilder {
+	mb.machine.Head = position
+	return mb
+}
+
+func (mb *MachineBuilder) AddHaltState(haltState string) *MachineBuilder {
+	mb.machine.HaltState = haltState
+	return mb
+}
+
+func (mb *MachineBuilder) AddRules(rules []Rule) *MachineBuilder {
+	mb.machine.Rules = rules
+	return mb
+}
+
+func (mb *MachineBuilder) Build() *Machine {
+	return mb.machine
+}
+
 type Config struct {
 	Tape         string `json:"tape"`
 	InitialState string `json:"initialState"`
@@ -98,13 +127,14 @@ func main() {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
-	machine := NewMachine(
-		strings.Split(machineConfig.Tape, ""),
-		machineConfig.InitialState,
-		machineConfig.Rules,
-		machineConfig.HeadPosition,
-		machineConfig.HaltState,
-	)
+
+	machine := NewMachineBuilder().
+		AddCurrentState(machineConfig.InitialState).
+		AddHaltState(machineConfig.HaltState).
+		AddHeadPosition(machineConfig.HeadPosition).
+		AddRules(machineConfig.Rules).
+		AddTape(strings.Split(machineConfig.Tape, "")).Build()
+
 	fmt.Printf("\nTURING MACHINE \nProgram: %s\n\n", filename)
 	if err := machine.Run(); err != nil {
 		fmt.Println(err.Error())
