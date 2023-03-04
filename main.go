@@ -25,11 +25,10 @@ type Machine struct {
 }
 
 func (m *Machine) PrintTape() {
-	fmt.Printf("|")
 	for i := 0; i < len(m.Tape); i++ {
-		fmt.Printf("%s|", m.Tape[i])
+		fmt.Printf("%s", m.Tape[i])
 	}
-	fmt.Printf("\n%s^%s\n", strings.Repeat(" ", m.Head*2+1), m.CurrentState)
+	fmt.Printf("\n%s^%s\n", strings.Repeat(" ", m.Head), m.CurrentState)
 }
 
 func (m *Machine) Run() error {
@@ -49,7 +48,7 @@ func (m *Machine) Run() error {
 				case "R":
 					m.Head++
 				default:
-					return errors.New("Unknown movement")
+					return errors.New("unknown movement")
 				}
 				break
 			}
